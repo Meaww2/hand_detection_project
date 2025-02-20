@@ -9,25 +9,26 @@ from mediapipe.tasks.python import vision
 
 cap = cv2.VideoCapture(0)
 
+# upload model สำหรับทำนายลักษณะของมือ
 base_options = python.BaseOptions(model_asset_path='gesture_recognizer.task')
 options = vision.GestureRecognizerOptions(base_options=base_options)
 recognizer = vision.GestureRecognizer.create_from_options(options)
-
+# เรียกใช้ lib สำหรับตรวจจับมือ
 drawing = mp.solutions.drawing_utils
 hands = mp.solutions.hands
 hand_obj = hands.Hands(max_num_hands=1)
-
+# ค่าสำหรับสั่งให้โปรแกรมไม่ออกคำสั่งซ้ำ
 start_init = False 
-
 prev = -1
 
-# Threshold for detecting sliding (in pixels)
+# ค่าสำหรับปรับความเร็วในการ slide มือเพื่อออกคำสั่ง
 SLIDE_THRESHOLD = 150
 
-# Store previous landmark positions
+# ค่าสำหรับคำนวณตำแหน่งมือก่อนหน้า
 prev_landmarks = None
 
 while True:
+    # เปิดการใช้งานในการกล้องเพื่อจับภาพ
     end_time = time.time()
     _, frm = cap.read()
     frm = cv2.flip(frm, 1)
@@ -36,6 +37,7 @@ while True:
     res = hand_obj.process(cv2.cvtColor(frm, cv2.COLOR_BGR2RGB))
     res_g = recognizer.recognize(image)
 
+    # Hand style
     if res_g.gestures:
         gesture_name = res_g.gestures[0][0].category_name  # Get top gesture
 
