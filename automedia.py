@@ -7,29 +7,6 @@ import mediapipe as mp
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
 
-def count_fingers(lst):
-    cnt = 0 
-
-    thresh = (lst.landmark[0].y*100 - lst.landmark[9].y*100)/2
- 
-    if (lst.landmark[5].y*100 - lst.landmark[8].y*100) > thresh:
-        cnt += 1
-
-    if (lst.landmark[9].y*100 - lst.landmark[12].y*100) > thresh:
-        cnt += 1
-
-    if (lst.landmark[13].y*100 - lst.landmark[16].y*100) > thresh:
-        cnt += 1
-
-    if (lst.landmark[17].y*100 - lst.landmark[20].y*100) > thresh:
-        cnt += 1
-
-    if (lst.landmark[5].x*100 - lst.landmark[4].x*100) > 6:
-        cnt += 1
-
-
-    return cnt 
-
 cap = cv2.VideoCapture(0)
 
 base_options = python.BaseOptions(model_asset_path='gesture_recognizer.task')
@@ -128,45 +105,3 @@ while True:
         cv2.destroyAllWindows()
         cap.release()
         break
-
-
-# import cv2
-# import mediapipe as mp
-
-# # Initialize Gesture Recognizer
-# mp_hands = mp.solutions.hands
-# mp_gestures = mp.solutions.gesture_recognizer
-# gesture_recognizer = mp_gestures.GestureRecognizer()
-
-# # Open Video Capture
-# cap = cv2.VideoCapture(0)
-
-# while cap.isOpened():
-#     ret, frame = cap.read()
-#     if not ret:
-#         break
-
-#     # Flip image for mirror effect
-#     frame = cv2.flip(frame, 1)
-#     rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    
-#     # Process frame
-#     results = gesture_recognizer.process(rgb_frame)
-
-#     if results.gestures:
-#         gesture_name = results.gestures[0][0].category_name  # Get top gesture
-
-#         if gesture_name == "Thumb_Up":
-#             cv2.putText(frame, "Thumbs Up Detected!", (50, 50), 
-#                         cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-
-#     # Show frame
-#     cv2.imshow("Thumbs Up Detection", frame)
-
-#     # Exit with 'q' key
-#     if cv2.waitKey(1) & 0xFF == ord('q'):
-#         break
-
-# # Release resources
-# cap.release()
-# cv2.destroyAllWindows()
